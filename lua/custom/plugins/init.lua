@@ -4,12 +4,12 @@
 -- See the kickstart.nvim README for more information
 return {
   require 'custom.plugins.copilot',
+  require 'custom.plugins.gitsigns',
   require 'custom.plugins.harpoon',
+  require 'custom.plugins.nvim-colorizer',
   require 'custom.plugins.nvim-tree',
   require 'custom.plugins.oil',
   require 'custom.plugins.rainbow-csv',
   require 'custom.plugins.shade',
   require 'custom.plugins.vim-fugitive',
-  require 'custom.plugins.nvim-colorizer',
-  { 'lewis6991/gitsigns.nvim' },
 }
