@@ -4,6 +4,7 @@
 -- See the kickstart.nvim README for more information
 return {
   require 'custom.plugins.copilot',
+  require 'custom.plugins.dracula',
   require 'custom.plugins.gitsigns',
   require 'custom.plugins.harpoon',
   require 'custom.plugins.nvim-colorizer',
