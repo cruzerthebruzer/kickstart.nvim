@@ -216,6 +216,33 @@ if not vim.loop.fs_stat(lazypath) then
 end ---@diagnostic disable-next-line: undefined-field
 vim.opt.rtp:prepend(lazypath)
 
+local tsRemoveUnused = function()
+  vim.lsp.buf.code_action {
+    apply = true,
+    context = {
+      only = { 'source.removeUnused.ts' },
+      diagnostics = {},
+    },
+  }
+end
+
+-- This also removes unused variables which can be annoying when actively developing
+-- vim.api.nvim_create_autocmd({ 'BufWritePre' }, {
+--   group = vim.api.nvim_create_augroup('ts_imports', { clear = true }),
+--   pattern = { '*.tsx,*.ts,*.js,*.jsx' },
+--   callback = tsRemoveUnused,
+-- })
+
+local tsOrganizeImports = function()
+  vim.lsp.buf.code_action {
+    apply = true,
+    context = {
+      only = { 'source.organizeImports.ts' },
+      diagnostics = {},
+    },
+  }
+end
+
 -- [[ Configure and install plugins ]]
 --
 --  To check the current status of your plugins, run
@@ -287,6 +314,9 @@ require('lazy').setup({
         ['<leader>c'] = { name = '[C]ode', _ = 'which_key_ignore' },
         ['<leader>d'] = { name = '[D]ocument', _ = 'which_key_ignore' },
         ['<leader>e'] = { name = '[E]xplorer', _ = 'which_key_ignore' },
+        ['<leader>g'] = { name = '[G]it', _ = 'which_key_ignore' },
+        ['<leader>gc'] = { name = '[G]it [C]heckout', _ = 'which_key_ignore' },
+        ['<leader>h'] = { name = '[H]arpoon', _ = 'which_key_ignore' },
         ['<leader>r'] = { name = '[R]ename', _ = 'which_key_ignore' },
         ['<leader>s'] = { name = '[S]earch', _ = 'which_key_ignore' },
         ['<leader>w'] = { name = '[W]orkspace', _ = 'which_key_ignore' },
@@ -381,6 +411,10 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader>sr', builtin.resume, { desc = '[S]earch [R]esume' })
       vim.keymap.set('n', '<leader>s.', builtin.oldfiles, { desc = '[S]earch Recent Files ("." for repeat)' })
       vim.keymap.set('n', '<leader><leader>', builtin.buffers, { desc = '[ ] Find existing buffers' })
+
+      vim.keymap.set('n', '<leader>gs', '<cmd>Telescope git_status<cr>', { desc = '[G]it [S]tatus' })
+      vim.keymap.set('n', '<leader>gcb', '<cmd>Telescope git_branches<cr>', { desc = '[G]it [C]heckout [B]ranches' })
+      vim.keymap.set('n', '<leader>gcc', '<cmd>Telescope git_commits<cr>', { desc = '[G]it [C]heckout [C]ommit' })
 
       -- Slightly advanced example of overriding default behavior and theme
       vim.keymap.set('n', '<leader>/', function()
@@ -497,6 +531,9 @@ require('lazy').setup({
           -- Execute a code action, usually your cursor needs to be on top of an error
           -- or a suggestion from your LSP for this to activate.
           map('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction')
+          -- TODO: Move this to only load on TS,JS,TSX,JSX if possible
+          map('<leader>ci', tsRemoveUnused, '[C]ode Unused [I]mports')
+          map('<leader>co', tsOrganizeImports, '[C]ode [O]rganize Imports')
           map('<M-Enter>', vim.lsp.buf.code_action, 'Code Action')
 
           -- Opens a popup that displays documentation about the word under your cursor
