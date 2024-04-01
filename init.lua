@@ -413,7 +413,7 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader><leader>', builtin.buffers, { desc = '[ ] Find existing buffers' })
 
       -- Not sure why require 'telescope' and using directly isn't working
-      vim.keymap.set('n', '<leader>gs', '<cmd>Telescope git_status<cr>', { desc = '[G]it [S]tatus' })
+      vim.keymap.set('n', '<leader>gs', '<cmd>Telescope git_status<cr>', { desc = '[G]it [s]tatus' })
       vim.keymap.set('n', '<leader>gcb', '<cmd>Telescope git_branches<cr>', { desc = '[G]it [C]heckout [B]ranches' })
       vim.keymap.set('n', '<leader>gcc', '<cmd>Telescope git_commits<cr>', { desc = '[G]it [C]heckout [C]ommit' })
 
