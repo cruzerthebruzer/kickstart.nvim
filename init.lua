@@ -533,7 +533,7 @@ require('lazy').setup({
           -- or a suggestion from your LSP for this to activate.
           map('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction')
           -- TODO: Move this to only load on TS,JS,TSX,JSX if possible
-          map('<leader>ci', tsRemoveUnused, '[C]ode Unused [I]mports')
+          map('<leader>cu', tsRemoveUnused, '[C]ode Remove [U]nused')
           map('<leader>co', tsOrganizeImports, '[C]ode [O]rganize Imports')
           map('<M-Enter>', vim.lsp.buf.code_action, 'Code Action')
 
