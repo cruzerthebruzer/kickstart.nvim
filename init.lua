@@ -313,10 +313,11 @@ require('lazy').setup({
       require('which-key').register {
         ['<leader>c'] = { name = '[C]ode', _ = 'which_key_ignore' },
         ['<leader>d'] = { name = '[D]ocument', _ = 'which_key_ignore' },
-        ['<leader>e'] = { name = '[E]xplorer', _ = 'which_key_ignore' },
+        -- ['<leader>e'] = { name = '[E]xplorer', _ = 'which_key_ignore' },
         ['<leader>g'] = { name = '[G]it', _ = 'which_key_ignore' },
         ['<leader>gc'] = { name = '[G]it [C]heckout', _ = 'which_key_ignore' },
         ['<leader>h'] = { name = '[H]arpoon', _ = 'which_key_ignore' },
+        ['<leader>l'] = { name = '[L]sp', _ = 'which_key_ignore' },
         ['<leader>r'] = { name = '[R]ename', _ = 'which_key_ignore' },
         ['<leader>s'] = { name = '[S]earch', _ = 'which_key_ignore' },
         ['<leader>w'] = { name = '[W]orkspace', _ = 'which_key_ignore' },
@@ -533,7 +534,7 @@ require('lazy').setup({
           -- or a suggestion from your LSP for this to activate.
           map('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction')
           -- TODO: Move this to only load on TS,JS,TSX,JSX if possible
-          map('<leader>ci', tsRemoveUnused, '[C]ode Unused [I]mports')
+          map('<leader>cu', tsRemoveUnused, '[C]ode Remove [U]nused')
           map('<leader>co', tsOrganizeImports, '[C]ode [O]rganize Imports')
           map('<M-Enter>', vim.lsp.buf.code_action, 'Code Action')
 
@@ -583,9 +584,9 @@ require('lazy').setup({
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
       local servers = {
         -- clangd = {},
-        -- gopls = {},
-        -- pyright = {},
-        -- rust_analyzer = {},
+        gopls = {},
+        pyright = {},
+        rust_analyzer = {},
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
         --
         -- Some languages (like typescript) have entire language plugins that can be useful:
@@ -609,6 +610,11 @@ require('lazy').setup({
             },
           },
         },
+        kotlin_language_server = {},
+        bashls = {},
+        vuels = {},
+        elixirls = {},
+        gradle_ls = {},
       }
       -- Ensure the servers and tools above are installed
       --  To check the current status of installed tools and/or manually install
