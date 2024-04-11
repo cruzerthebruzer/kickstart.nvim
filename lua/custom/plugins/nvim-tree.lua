@@ -42,5 +42,5 @@ return {
       },
     }
   end,
-  vim.keymap.set('n', '<leader>et', ':NvimTreeToggle<CR>', { desc = '[T]oggle NvimTree' }),
+  vim.keymap.set('n', '<leader>ce', ':NvimTreeToggle<CR>', { desc = '[C]ode [E]xplorer' }),
 }
