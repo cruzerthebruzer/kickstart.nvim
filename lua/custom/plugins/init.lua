@@ -9,6 +9,7 @@ return {
   require 'custom.plugins.harpoon',
   require 'custom.plugins.nvim-colorizer',
   require 'custom.plugins.nvim-tree',
+  require 'custom.plugins.obsidian',
   require 'custom.plugins.oil',
   require 'custom.plugins.rainbow-csv',
   require 'custom.plugins.shade',
