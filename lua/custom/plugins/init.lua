@@ -12,7 +12,8 @@ return {
   require 'custom.plugins.obsidian',
   require 'custom.plugins.oil',
   require 'custom.plugins.rainbow-csv',
-  require 'custom.plugins.shade',
+  require 'custom.plugins.tokyonight',
   require 'custom.plugins.trouble',
+  require 'custom.plugins.undo-tree',
   require 'custom.plugins.vim-fugitive',
 }
