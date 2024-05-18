@@ -261,8 +261,6 @@ vim.api.nvim_create_autocmd('FileType', {
       vim.keymap.set('n', keys, func, { buffer = event.buf, desc = 'LSP: ' .. desc })
     end
 
-    vim.cmd.colorscheme 'dracula'
-
     map('<leader>cu', tsRemoveUnused, '[C]ode Remove [U]nused')
     map('<leader>co', tsOrganizeImports, '[C]ode [O]rganize Imports')
   end,

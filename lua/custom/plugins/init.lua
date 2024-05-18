@@ -3,6 +3,7 @@
 --
 -- See the kickstart.nvim README for more information
 return {
+  require 'custom.plugins.arrow',
   require 'custom.plugins.copilot',
   require 'custom.plugins.dracula',
   require 'custom.plugins.gitsigns',
