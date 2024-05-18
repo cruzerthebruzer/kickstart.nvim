@@ -162,7 +162,13 @@ vim.opt.scrolloff = 10
 
 -- Set highlight on search, but clear on pressing <Esc> in normal mode
 vim.opt.hlsearch = true
-vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
+
+function onEscape()
+  vim.cmd 'nohlsearch'
+  vim.cmd 'lua MiniFiles.close()'
+end
+
+vim.keymap.set('n', '<Esc>', ':lua onEscape()<CR>', { desc = 'Clear search and close certain windows' })
 
 vim.keymap.set('n', '<A-p>', '<cmd>cprev<CR>', { desc = 'Go to next [D]iagnostic message' })
 vim.keymap.set('n', '<A-n>', '<cmd>cnext<CR>', { desc = 'Go to previous [D]iagnostic message' })
@@ -244,6 +250,23 @@ local tsOrganizeImports = function()
     },
   }
 end
+-- TODO: Figure out how to make multiple file types work in after/ftplugin if possible javascript_typescript.lua did not work
+local group = vim.api.nvim_create_augroup('JsTsSettings', { clear = true })
+
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = { 'javascript', 'typescript', 'typescriptreact', 'javascriptreact' },
+  group = group,
+  callback = function(event)
+    local map = function(keys, func, desc)
+      vim.keymap.set('n', keys, func, { buffer = event.buf, desc = 'LSP: ' .. desc })
+    end
+
+    vim.cmd.colorscheme 'dracula'
+
+    map('<leader>cu', tsRemoveUnused, '[C]ode Remove [U]nused')
+    map('<leader>co', tsOrganizeImports, '[C]ode [O]rganize Imports')
+  end,
+})
 
 -- [[ Configure and install plugins ]]
 --
@@ -389,6 +412,7 @@ require('lazy').setup({
           --   i = { ['<c-enter>'] = 'to_fuzzy_refine' },
           -- },
           -- file_ignore_patterns = { 'node_modules', '.git' },
+          -- path_display = { 'filename_first' },
         },
         -- pickers = {}
         extensions = {
@@ -539,8 +563,8 @@ require('lazy').setup({
           -- or a suggestion from your LSP for this to activate.
           map('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction')
           -- TODO: Move this to only load on TS,JS,TSX,JSX if possible
-          map('<leader>cu', tsRemoveUnused, '[C]ode Remove [U]nused')
-          map('<leader>co', tsOrganizeImports, '[C]ode [O]rganize Imports')
+          -- map('<leader>cu', tsRemoveUnused, '[C]ode Remove [U]nused')
+          -- map('<leader>co', tsOrganizeImports, '[C]ode [O]rganize Imports')
           map('<M-Enter>', vim.lsp.buf.code_action, 'Code Action')
 
           -- Opens a popup that displays documentation about the word under your cursor
@@ -804,6 +828,9 @@ require('lazy').setup({
       --  - ci'  - [C]hange [I]nside [']quote
       require('mini.ai').setup { n_lines = 500 }
 
+      require('mini.files').setup()
+      vim.keymap.set('n', '<leader>f', require('mini.files').open, { desc = '[F]ile Browser' })
+
       -- Add/delete/replace surroundings (brackets, quotes, etc.)
       --
       -- - saiw) - [S]urround [A]dd [I]nner [W]ord [)]Paren
@@ -872,7 +899,7 @@ require('lazy').setup({
   --
   -- require 'kickstart.plugins.debug',
   -- require 'kickstart.plugins.indent_line',
-  -- require 'kickstart.plugins.lint',
+  require 'kickstart.plugins.lint',
 
   -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
   --    This is the easiest way to modularize your config.
