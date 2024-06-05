@@ -168,7 +168,7 @@ function onEscape()
   vim.cmd 'lua MiniFiles.close()'
 end
 
-vim.keymap.set('n', '<Esc>', ':lua onEscape()<CR>', { desc = 'Clear search and close certain windows' })
+vim.keymap.set('n', '<Esc>', ':lua onEscape()<CR>', { desc = 'Clear search and close certain windows', silent = true })
 
 vim.keymap.set('n', '<A-p>', '<cmd>cprev<CR>', { desc = 'Go to next [D]iagnostic message' })
 vim.keymap.set('n', '<A-n>', '<cmd>cnext<CR>', { desc = 'Go to previous [D]iagnostic message' })
@@ -426,24 +426,24 @@ require('lazy').setup({
 
       -- See `:help telescope.builtin`
       local builtin = require 'telescope.builtin'
-      vim.keymap.set('n', '<leader>sh', builtin.help_tags, { desc = '[S]earch [H]elp' })
-      vim.keymap.set('n', '<leader>sk', builtin.keymaps, { desc = '[S]earch [K]eymaps' })
-      vim.keymap.set('n', '<leader>sf', builtin.find_files, { desc = '[S]earch [F]iles' })
+      vim.keymap.set('n', '<leader>sh', builtin.help_tags, { desc = '[S]earch [H]elp', noremap = true })
+      vim.keymap.set('n', '<leader>sk', builtin.keymaps, { desc = '[S]earch [K]eymaps', noremap = true })
+      vim.keymap.set('n', '<leader>sf', builtin.find_files, { desc = '[S]earch [F]iles', noremap = true })
       vim.keymap.set('n', '<leader>shf', function()
         builtin.find_files { hidden = true }
-      end, { desc = '[S]earch [H]idden [F]iles' })
-      vim.keymap.set('n', '<leader>ss', builtin.builtin, { desc = '[S]earch [S]elect Telescope' })
-      vim.keymap.set('n', '<leader>sw', builtin.grep_string, { desc = '[S]earch current [W]ord' })
-      vim.keymap.set('n', '<leader>sg', builtin.live_grep, { desc = '[S]earch by [G]rep' })
-      vim.keymap.set('n', '<leader>sd', builtin.diagnostics, { desc = '[S]earch [D]iagnostics' })
-      vim.keymap.set('n', '<leader>sr', builtin.resume, { desc = '[S]earch [R]esume' })
-      vim.keymap.set('n', '<leader>s.', builtin.oldfiles, { desc = '[S]earch Recent Files ("." for repeat)' })
-      vim.keymap.set('n', '<leader><leader>', builtin.buffers, { desc = '[ ] Find existing buffers' })
+      end, { desc = '[S]earch [H]idden [F]iles', noremap = true })
+      vim.keymap.set('n', '<leader>ss', builtin.builtin, { desc = '[S]earch [S]elect Telescope', noremap = true })
+      vim.keymap.set('n', '<leader>sw', builtin.grep_string, { desc = '[S]earch current [W]ord', noremap = true })
+      vim.keymap.set('n', '<leader>sg', builtin.live_grep, { desc = '[S]earch by [G]rep', noremap = true })
+      vim.keymap.set('n', '<leader>sd', builtin.diagnostics, { desc = '[S]earch [D]iagnostics', noremap = true })
+      vim.keymap.set('n', '<leader>sr', builtin.resume, { desc = '[S]earch [R]esume', noremap = true })
+      vim.keymap.set('n', '<leader>s.', builtin.oldfiles, { desc = '[S]earch Recent Files ("." for repeat)', noremap = true })
+      vim.keymap.set('n', '<leader><leader>', builtin.buffers, { desc = '[ ] Find existing buffers', noremap = true })
 
       -- Not sure why require 'telescope' and using directly isn't working
-      vim.keymap.set('n', '<leader>gs', '<cmd>Telescope git_status<cr>', { desc = '[G]it [s]tatus' })
-      vim.keymap.set('n', '<leader>gcb', '<cmd>Telescope git_branches<cr>', { desc = '[G]it [C]heckout [B]ranches' })
-      vim.keymap.set('n', '<leader>gcc', '<cmd>Telescope git_commits<cr>', { desc = '[G]it [C]heckout [C]ommit' })
+      vim.keymap.set('n', '<leader>gs', '<cmd>Telescope git_status<cr>', { desc = '[G]it [s]tatus', noremap = true })
+      vim.keymap.set('n', '<leader>gcb', '<cmd>Telescope git_branches<cr>', { desc = '[G]it [C]heckout [B]ranches', noremap = true })
+      vim.keymap.set('n', '<leader>gcc', '<cmd>Telescope git_commits<cr>', { desc = '[G]it [C]heckout [C]ommit', noremap = true })
 
       -- Slightly advanced example of overriding default behavior and theme
       vim.keymap.set('n', '<leader>/', function()
@@ -452,7 +452,7 @@ require('lazy').setup({
           winblend = 10,
           previewer = false,
         })
-      end, { desc = '[/] Fuzzily search in current buffer' })
+      end, { desc = '[/] Fuzzily search in current buffer', noremap = true })
 
       -- It's also possible to pass additional configuration options.
       --  See `:help telescope.builtin.live_grep()` for information about particular keys
@@ -461,12 +461,12 @@ require('lazy').setup({
           grep_open_files = true,
           prompt_title = 'Live Grep in Open Files',
         }
-      end, { desc = '[S]earch [/] in Open Files' })
+      end, { desc = '[S]earch [/] in Open Files', noremap = true })
 
       -- Shortcut for searching your Neovim configuration files
       vim.keymap.set('n', '<leader>sn', function()
         builtin.find_files { cwd = vim.fn.stdpath 'config' }
-      end, { desc = '[S]earch [N]eovim files' })
+      end, { desc = '[S]earch [N]eovim files', noremap = true })
     end,
   },
 
@@ -749,7 +749,6 @@ require('lazy').setup({
       -- See `:help cmp`
       local cmp = require 'cmp'
       local luasnip = require 'luasnip'
-      luasnip.config.setup {}
 
       cmp.setup {
         snippet = {
@@ -897,7 +896,7 @@ require('lazy').setup({
   --
   -- require 'kickstart.plugins.debug',
   -- require 'kickstart.plugins.indent_line',
-  require 'kickstart.plugins.lint',
+  -- require 'kickstart.plugins.lint',
 
   -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
   --    This is the easiest way to modularize your config.
