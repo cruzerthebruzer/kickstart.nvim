@@ -1,6 +1,6 @@
 return {
   'folke/tokyonight.nvim',
   init = function()
-    vim.cmd.colorscheme 'tokyonight-night'
+    -- vim.cmd.colorscheme 'tokyonight-night'
   end,
 }
