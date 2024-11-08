@@ -4,9 +4,7 @@
 -- See the kickstart.nvim README for more information
 return {
   require 'custom.plugins.arrow',
-  require 'custom.plugins.catppuccin',
   require 'custom.plugins.copilot',
-  require 'custom.plugins.dracula',
   require 'custom.plugins.gitsigns',
   require 'custom.plugins.harpoon',
   require 'custom.plugins.lua-snip',
@@ -16,7 +14,6 @@ return {
   require 'custom.plugins.oil',
   require 'custom.plugins.peek',
   require 'custom.plugins.rainbow-csv',
-  require 'custom.plugins.tokyonight',
   require 'custom.plugins.trouble',
   require 'custom.plugins.undo-tree',
   require 'custom.plugins.vim-fugitive',
