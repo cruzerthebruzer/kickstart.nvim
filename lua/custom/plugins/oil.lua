@@ -2,7 +2,7 @@ return {
   'stevearc/oil.nvim',
   opts = {},
   -- Optional dependencies
-  dependencies = { 'nvim-tree/nvim-web-devicons' },
+  -- dependencies = { 'nvim-tree/nvim-web-devicons' },
   config = function()
     require('oil').setup {
       -- Oil will take over directory buffers (e.g. `vim .` or `:e src/`)
@@ -62,6 +62,8 @@ return {
       -- Set to `false` to remove a keymap
       -- See :help oil-actions for a list of all available actions
       keymaps = {
+        ['<C-h>'] = false,
+        ['<C-l>'] = false,
         -- ['g?'] = 'actions.show_help',
         -- ['<CR>'] = 'actions.select',
         -- ['<C-s>'] = 'actions.select_vsplit',
@@ -76,7 +78,7 @@ return {
         -- ['~'] = 'actions.tcd',
         -- ['gs'] = 'actions.change_sort',
         -- ['gx'] = 'actions.open_external',
-        -- ['g.'] = 'actions.toggle_hidden',
+        ['g.'] = 'actions.toggle_hidden',
         -- ['g\\'] = 'actions.toggle_trash',
       },
       -- Configuration for the floating keymaps help window
