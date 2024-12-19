@@ -592,7 +592,7 @@ require('lazy').setup({
         --    https://github.com/pmizio/typescript-tools.nvim
         --
         -- But for many setups, the LSP (`tsserver`) will work just fine
-        tsserver = {},
+        ts_ls = {},
         --
 
         lua_ls = {
@@ -637,12 +637,18 @@ require('lazy').setup({
             require('lspconfig')[server_name].setup(server)
           end,
         },
+        opts = {
+          ensure_installed = {
+            'eslint@4.8.0',
+          },
+        },
       }
     end,
   },
 
   { -- Autoformat
     'stevearc/conform.nvim',
+    commit = '8b5e13c1af3211f5bb5e091992aba8629312e514',
     opts = {
       notify_on_error = false,
       format_on_save = function(bufnr)
@@ -822,10 +828,11 @@ require('lazy').setup({
   { -- Highlight, edit, and navigate code
     'nvim-treesitter/nvim-treesitter',
     build = ':TSUpdate',
+    main = 'nvim-treesitter.configs',
     opts = {
-      ensure_installed = { 'bash', 'c', 'html', 'lua', 'markdown', 'vim', 'vimdoc' },
+      ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' },
       -- Autoinstall languages that are not installed
-      auto_install = true,
+      -- auto_install = true,
       highlight = {
         enable = true,
         -- Some languages depend on vim's regex highlighting system (such as Ruby) for indent rules.
@@ -838,6 +845,7 @@ require('lazy').setup({
     config = function(_, opts)
       -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
 
+      require('nvim-treesitter.install').compilers = { 'clang' }
       ---@diagnostic disable-next-line: missing-fields
       require('nvim-treesitter.configs').setup(opts)
 
