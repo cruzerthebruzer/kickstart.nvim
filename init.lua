@@ -193,6 +193,10 @@ vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right win
 vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
 vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
 
+-- Buffers
+vim.keymap.set('n', '<leader>bdo', ':%bd|e#|bd#<CR>', { noremap = true, silent = true, desc = '[B]uffer [D]elete [O]thers' })
+vim.keymap.set('n', '<leader>bda', ':bfudo bd<CR>', { noremap = true, silent = true, desc = '[B]uffer [D]elete [A]ll' })
+
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
 
@@ -302,26 +306,67 @@ require('lazy').setup({
   -- Then, because we use the `config` key, the configuration only runs
   -- after the plugin has been loaded:
   --  config = function() ... end
-
-  { -- Useful plugin to show you pending keybinds.
+  {
     'folke/which-key.nvim',
     event = 'VimEnter', -- Sets the loading event to 'VimEnter'
-    config = function() -- This is the function that runs, AFTER loading
-      require('which-key').setup()
+    opts = {
+      -- delay between pressing a key and opening which-key (milliseconds)
+      -- this setting is independent of vim.o.timeoutlen
+      delay = 0,
+      icons = {
+        -- set icon mappings to true if you have a Nerd Font
+        mappings = vim.g.have_nerd_font,
+        -- If you are using a Nerd Font: set icons.keys to an empty table which will use the
+        -- default which-key.nvim defined Nerd Font icons, otherwise define a string table
+        keys = vim.g.have_nerd_font and {} or {
+          Up = '<Up> ',
+          Down = '<Down> ',
+          Left = '<Left> ',
+          Right = '<Right> ',
+          C = '<C-…> ',
+          M = '<M-…> ',
+          D = '<D-…> ',
+          S = '<S-…> ',
+          CR = '<CR> ',
+          Esc = '<Esc> ',
+          ScrollWheelDown = '<ScrollWheelDown> ',
+          ScrollWheelUp = '<ScrollWheelUp> ',
+          NL = '<NL> ',
+          BS = '<BS> ',
+          Space = '<Space> ',
+          Tab = '<Tab> ',
+          F1 = '<F1>',
+          F2 = '<F2>',
+          F3 = '<F3>',
+          F4 = '<F4>',
+          F5 = '<F5>',
+          F6 = '<F6>',
+          F7 = '<F7>',
+          F8 = '<F8>',
+          F9 = '<F9>',
+          F10 = '<F10>',
+          F11 = '<F11>',
+          F12 = '<F12>',
+        },
+      },
 
       -- Document existing key chains
-      require('which-key').register {
-        ['<leader>c'] = { name = '[C]ode', _ = 'which_key_ignore' },
-        ['<leader>d'] = { name = '[D]ocument', _ = 'which_key_ignore' },
-        ['<leader>e'] = { name = '[E]xplorer', _ = 'which_key_ignore' },
-        ['<leader>g'] = { name = '[G]it', _ = 'which_key_ignore' },
-        ['<leader>gc'] = { name = '[G]it [C]heckout', _ = 'which_key_ignore' },
-        ['<leader>h'] = { name = '[H]arpoon', _ = 'which_key_ignore' },
-        ['<leader>r'] = { name = '[R]ename', _ = 'which_key_ignore' },
-        ['<leader>s'] = { name = '[S]earch', _ = 'which_key_ignore' },
-        ['<leader>w'] = { name = '[W]orkspace', _ = 'which_key_ignore' },
-      }
-    end,
+      spec = {
+        -- { '<leader>t', group = '[T]oggle' },
+        -- { '<leader>h', group = 'Git [H]unk', mode = { 'n', 'v' } },
+
+        { '<leader>b', group = '[B]uffers' },
+        { '<leader>c', group = '[C]ode' },
+        { '<leader>d', group = '[D]ocument' },
+        { '<leader>e', group = '[E]xplorer' },
+        { '<leader>g', group = '[G]it' },
+        { '<leader>gc', group = '[G]it [C]heckout' },
+        { '<leader>gd', group = '[G]it [D]iff' },
+        { '<leader>h', group = '[H]arpoon' },
+        { '<leader>r', group = '[R]ename' },
+        { '<leader>s', group = '[S]earch' },
+      },
+    },
   },
 
   -- NOTE: Plugins can specify dependencies.
@@ -334,7 +379,7 @@ require('lazy').setup({
   { -- Fuzzy Finder (files, lsp, etc)
     'nvim-telescope/telescope.nvim',
     event = 'VimEnter',
-    branch = '0.1.x',
+    branch = 'master',
     dependencies = {
       'nvim-lua/plenary.nvim',
       { -- If encountering errors, see telescope-fzf-native README for installation instructions
@@ -385,7 +430,16 @@ require('lazy').setup({
           -- mappings = {
           --   i = { ['<c-enter>'] = 'to_fuzzy_refine' },
           -- },
-          -- file_ignore_patterns = { 'node_modules', '.git' },
+          file_ignore_patterns = { 'node_modules', '.git', 'package%-lock%.json' },
+          -- This doesn't work for some reason
+          -- path_to_display = function(_, filepath)
+          --   local max_length = 1
+          --   if #filepath <= max_length then
+          --     return filepath
+          --   else
+          --     return '...' .. filepath:sub(#filepath - max_length + 1)
+          --   end
+          -- end,
         },
         -- pickers = {}
         extensions = {
@@ -500,6 +554,18 @@ require('lazy').setup({
             vim.keymap.set('n', keys, func, { buffer = event.buf, desc = 'LSP: ' .. desc })
           end
 
+          local telescope_path_args = {
+            path_display = {
+              'filename_first',
+              shorten = { len = 3, exclude = { -1 } },
+            },
+            layout_config = {
+              horizontal = {
+                results_width = 0.7, -- default is ~0.5
+              },
+            },
+          }
+
           -- Jump to the definition of the word under your cursor.
           --  This is where a variable was first declared, or where a function is defined, etc.
           --  To jump back, press <C-t>.
@@ -595,6 +661,10 @@ require('lazy').setup({
         ts_ls = {},
         --
 
+        -- Tailwind v4 language server: at-rule support (@theme/@utility) and
+        -- class completion in css/tsx. Reads the CSS entry point as config.
+        tailwindcss = {},
+
         lua_ls = {
           -- cmd = {...},
           -- filetypes = { ...},
@@ -625,6 +695,28 @@ require('lazy').setup({
         'stylua', -- Used to format Lua code
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
+
+      -- ESLint LSP config (mason-lspconfig 2.x enables servers via vim.lsp.enable
+      -- and reads their config from vim.lsp.config, not the `servers` table above).
+      -- `workingDirectories = auto` runs ESLint from the nearest package dir so
+      -- each package's flat config and its tsconfigRootDir resolve unambiguously
+      -- in this monorepo.
+      vim.lsp.config('eslint', {
+        settings = {
+          workingDirectories = { mode = 'auto' },
+        },
+      })
+
+      -- cssls validates against the plain CSS spec; Tailwind v4 at-rules
+      -- (@theme, @utility, @custom-variant, @source) are compiled away by the
+      -- build, so stop flagging them as unknown.
+      vim.lsp.config('cssls', {
+        settings = {
+          css = { lint = { unknownAtRules = 'ignore' } },
+          scss = { lint = { unknownAtRules = 'ignore' } },
+          less = { lint = { unknownAtRules = 'ignore' } },
+        },
+      })
 
       require('mason-lspconfig').setup {
         handlers = {
@@ -673,6 +765,7 @@ require('lazy').setup({
         javascriptreact = { { 'prettierd', 'prettier' } },
         typescriptreact = { { 'prettierd', 'prettier' } },
         css = { { 'prettierd', 'prettier' } },
+        scss = { { 'prettierd', 'prettier' } },
         html = { { 'prettierd', 'prettier' } },
         json = { { 'prettierd', 'prettier' } },
         yaml = { { 'prettierd', 'prettier' } },
@@ -811,7 +904,32 @@ require('lazy').setup({
       --  and try some other statusline plugin
       local statusline = require 'mini.statusline'
       -- set use_icons to true if you have a Nerd Font
-      statusline.setup { use_icons = vim.g.have_nerd_font }
+      statusline.setup {
+        use_icons = vim.g.have_nerd_font,
+        content = {
+          active = function()
+            local mode, mode_hl = statusline.section_mode { trunc_width = 120 }
+            local git = statusline.section_git { trunc_width = 40 }
+            local diff = statusline.section_diff { trunc_width = 75 }
+            local diagnostics = statusline.section_diagnostics { trunc_width = 75 }
+            local lsp = statusline.section_lsp { trunc_width = 75 }
+            local filename = statusline.section_filename { trunc_width = 200 }
+            local fileinfo = statusline.section_fileinfo { trunc_width = 120 }
+            local location = statusline.section_location { trunc_width = 75 }
+            local search = statusline.section_searchcount { trunc_width = 75 }
+
+            return statusline.combine_groups {
+              { hl = mode_hl, strings = { mode } },
+              { hl = 'MiniStatuslineDevinfo', strings = { git, diff } },
+              '%<', -- Mark general truncate point
+              { hl = 'MiniStatuslineFilename', strings = { filename } },
+              '%=', -- End left alignment
+              -- { hl = 'MiniStatuslineFileinfo', strings = { fileinfo } },
+              { hl = mode_hl, strings = { search, location } },
+            }
+          end,
+        },
+      }
 
       -- You can configure sections in the statusline by overriding their
       -- default behavior. For example, here we set the section for

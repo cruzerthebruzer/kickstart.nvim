@@ -3,6 +3,9 @@ return {
   dependencies = { 'nvim-tree/nvim-web-devicons' },
   config = function()
     require('nvim-tree').setup {
+      hijack_directories = {
+        enable = false,
+      },
       sort = {
         sorter = 'case_sensitive',
       },

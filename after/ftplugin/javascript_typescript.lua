@@ -32,5 +32,3 @@ vim.api.nvim_create_autocmd('FileType', {
     map('<leader>co', tsOrganizeImports, '[C]ode [O]rganize Imports')
   end,
 })
-
-print 'Hello!'
