@@ -211,6 +211,18 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   end,
 })
 
+vim.opt.autoread = true
+vim.api.nvim_create_autocmd({ 'FocusGained', 'BufEnter', 'CursorHold' }, {
+  desc = 'Reload buffers changed on disk',
+  group = vim.api.nvim_create_augroup('custom-autoread', { clear = true }),
+  callback = function()
+    -- checktime raises E11 inside the command-line window
+    if vim.fn.mode() ~= 'c' and vim.fn.getcmdwintype() == '' then
+      vim.cmd 'checktime'
+    end
+  end,
+})
+
 -- [[ Install `lazy.nvim` plugin manager ]]
 --    See `:help lazy.nvim.txt` or https://github.com/folke/lazy.nvim for more info
 local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
@@ -658,12 +670,32 @@ require('lazy').setup({
         --    https://github.com/pmizio/typescript-tools.nvim
         --
         -- But for many setups, the LSP (`tsserver`) will work just fine
-        ts_ls = {},
+        -- Root at the repo, not the nearest tsconfig/package.json: in a
+        -- monorepo the default nearest-first root pins tsserver inside one
+        -- workspace package, so it never finds the root solution tsconfig
+        -- and cross-package find-references comes up empty.
+        ts_ls = {
+          root_dir = function(fname)
+            local util = require 'lspconfig.util'
+            return util.root_pattern '.git'(fname) or util.root_pattern('tsconfig.json', 'jsconfig.json', 'package.json')(fname)
+          end,
+        },
         --
 
         -- Tailwind v4 language server: at-rule support (@theme/@utility) and
         -- class completion in css/tsx. Reads the CSS entry point as config.
-        tailwindcss = {},
+        tailwindcss = {
+          settings = {
+            tailwindCSS = {
+              lint = {
+                -- Off by choice: this rewrites arbitrary values to spacing-scale
+                -- positions (max-w-[350px] -> max-w-87.5), which obscures px
+                -- measurements taken straight from a design file.
+                suggestCanonicalClasses = 'ignore',
+              },
+            },
+          },
+        },
 
         lua_ls = {
           -- cmd = {...},
